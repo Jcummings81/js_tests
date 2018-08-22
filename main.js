@@ -18,8 +18,52 @@ var $failedList = $('#failed_tests')
 var $btn = $('#run')
 
 // Functions
+
+function makeLi(text) {
+  return '<li>' + text + '</li>'
+}
+
+function addPass(name) {
+  $pCount.text(++passed)
+  $passedList.append(makeLi(name))
+}
+
+function addFail(name, err) {
+  $fCount.text(++failed)
+  $failedList.append(makeLi(name + ' - ' + err))
+}
+
+function runTest(name, actual, expected) {
+  try {
+    expect(actual).toEqual(expected)
+    addPass(name)
+
+  } catch (err) {
+    addFail(name, err.message)
+  }
+}
+
 function run() {
-  console.log('Tests running')
+  // run all of my functions as test
+  runTest('sum', sum(2,3), 5)
+
+  //test data
+  var arr = [1,2,3]
+  var total = arr.reduce(sumArray, 0)
+  runTest('sum array', total, 6)
+  runTest('avg array', avgArray(arr), 2)
+}
+
+function sumArray(total, num) {
+  return total + num
+}
+
+function avgArray(arr) {
+  return arr.reduce( sumArray, 0 ) / arr.length
+}
+
+function sum(x,y) {
+  return x + y
 }
 
 // Listeners
